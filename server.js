@@ -19,7 +19,7 @@ mongoose
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("Could not connect to MongoDB:", err));
 
-const authRoutes = require("/routes/authRoutes");
+const authRoutes = require("./routes/authRoutes");
 app.use("/auth", authRoutes);
 
 app.listen(port, () => {
