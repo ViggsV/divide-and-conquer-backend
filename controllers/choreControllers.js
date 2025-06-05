@@ -34,11 +34,11 @@ exports.addChore = async (req, res) => {
   const chore = new Chore({
     task: req.body.task,
     assigned: req.body.assigned,
+    completed:req.body.completed,
     rating: req.body.rating,
     room: req.body.room,
     date: req.body.date,
     time: req. body.time,
-    imageURL: req.body.imageURL,
     description: req.body.description,
     userId: userInDB._id,
   });
