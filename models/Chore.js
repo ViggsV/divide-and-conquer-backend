@@ -6,7 +6,7 @@ const choreSchema = new mongoose.Schema({
     required: true
   },
   assigned: {
-    type: boolean,
+    type: Boolean,
     default: true
   },
   completed: {
