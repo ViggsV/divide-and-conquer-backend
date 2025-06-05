@@ -10,12 +10,12 @@ exports.getChores = async (req, res) => {
   }
 };
 
-exports.choredChore = async (req, res) => {
-  console.log("choredChore");
-  console.log(req.hechoreers);
+exports.addChore = async (req, res) => {
+  console.log("addChore");
+
   console.log(req.body);
 
-  const userToken = req.hechoreers.authorization.split(" ")[1];
+  const userToken = req.headers.authorization.split(" ")[1];
 
   console.log(userToken);
 
@@ -52,7 +52,7 @@ exports.choredChore = async (req, res) => {
 // Update
 exports.updateChore = async (req, res) => {
   try {
-    const userToken = req.hechoreers.authorization.split(" ")[1];
+    const userToken = req.headers.authorization.split(" ")[1];
 
   if (!userToken) {
     return res.status(401).json({ message: "Unauthorized" });
@@ -85,7 +85,7 @@ exports.updateChore = async (req, res) => {
 // Delete
 exports.removeChore= async (req, res) => {
   try {
- const userToken = req.hechoreers.authorization.split(" ")[1];
+ const userToken = req.headers.authorization.split(" ")[1];
 
   if (!userToken) {
     return res.status(401).json({ message: "Unauthorized" });

@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { getChores, addChore , updateChore, removeChore} = require('../controllers/ChoreController');
+const Chore = require('../models/Chore');
+
+const { getChores, addChore , updateChore, removeChore} = require('../controllers/choreController');
 
 // Get all chores
 router.get('/', getChores);

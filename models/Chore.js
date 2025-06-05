@@ -6,8 +6,12 @@ const choreSchema = new mongoose.Schema({
     required: true
   },
   assigned: {
-    type: String,
-    required: true
+    type: boolean,
+    default: true
+  },
+  completed: {
+    type: Boolean,  
+    default: false
   },
 rating: {
     type: String,
@@ -26,24 +30,12 @@ rating: {
     type: String,
     require: true
   },
-  imageURL: {
-    type: String,
-    required: false
-  },
+
   description: {
     type: String,
     required: true
   },
   
-  createdAt: {
-    type: Date,
-    default: Date.now
-  },
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  }
 });
 
 module.exports = mongoose.model('Chore', choreSchema);
