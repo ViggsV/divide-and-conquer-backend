@@ -12,7 +12,7 @@ exports.getChores = async (req, res) => {
 
 exports.addChore = async (req, res) => {
   console.log("addChore");
-
+  console.log(req.headers);
   console.log(req.body);
 
   const userToken = req.headers.authorization.split(" ")[1];
