@@ -20,7 +20,7 @@ mongoose
   .catch((err) => console.error("Could not connect to MongoDB:", err));
 
 const choreRoutes = require("./routes/choreRoutes");
-const authRoutes = require("../routes/authRoutes");
+const authRoutes = require("./routes/authRoutes");
 
 
 app.use("/chores", choreRoutes);
