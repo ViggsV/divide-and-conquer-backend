@@ -25,6 +25,9 @@ const authRoutes = require("./routes/authRoutes.js");
 
 app.use("/chores", choreRoutes);
 app.use("/auth", authRoutes);
+app.get('/', (request, response) => {
+    response.send(`Welcome to divide and conquer API`);
+});
 
 app.listen(port, () => {
   console.log(`server is running on http://localhost:${port}`);
