@@ -19,8 +19,8 @@ mongoose
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("Could not connect to MongoDB:", err));
 
-const choreRoutes = require("./routes/choreRoutes.js");
-const authRoutes = require("./routes/authRoutes.js");
+const choreRoutes = require("./routes/choreRoutes");
+const authRoutes = require("../routes/authRoutes");
 
 
 app.use("/chores", choreRoutes);
