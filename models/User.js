@@ -15,7 +15,7 @@ userSchema.pre("save", async function(next) {
   next();
 });
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.models.User || mongoose.model('User', userSchema);
 
 // useSchema is calling two arguments; 'save', and async function(next) {...}
 // async function(next) is a callback function that will be executed before the document is saved to the database.
