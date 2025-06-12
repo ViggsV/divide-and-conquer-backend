@@ -14,6 +14,7 @@ exports.addChore = async (req, res) => {
   console.log("addChore");
   console.log(req.headers);
   console.log(req.body);
+  console.log(req.body)
 
   const userToken = req.headers.authorization.split(" ")[1];
 
@@ -32,18 +33,20 @@ exports.addChore = async (req, res) => {
   }
 
   const chore = new Chore({
-    task: req.body.task,
+    task: req.body.title,
     assigned: req.body.assigned,
     completed:req.body.completed,
-    rating: req.body.rating,
-    room: req.body.room,
-    date: req.body.date,
-    time: req. body.time,
+    rating: req.body.difficulty,
+    room: "Living room",
+    date: req.body.dueDate,
+    time: "200",
     description: req.body.description,
-    userId: userInDB._id,
+    // userId: userInDB._id,
   });
+  console.log(chore)
   try {
     const newChore = await chore.save();
+    console.log(newChore)
     res.status(201).json(newChore);
   } catch (err) {
     res.status(400).json({ message: err.message });

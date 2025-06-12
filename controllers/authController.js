@@ -1,9 +1,12 @@
 const User = require("../Models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+require ("dotenv").config()
 
 // Signs id + email into the access token
 const generateToken = (user) => {
+  console.log(process.env.ACCESS_TOKEN_SECRET)
+  console.log(process.env.ACCESS_TOKEN_EXPIRES_IN)
   return jwt.sign(
     { id: user._id, email: user.email },
     process.env.ACCESS_TOKEN_SECRET,
@@ -151,6 +154,9 @@ exports.login = async (req, res) => {
 
     // Set refresh token cookie
     setRefreshTokenCookie(res, refreshToken);
+
+    user.token = accessToken
+    await user.save()
 
     res.json({ 
       accessToken,
