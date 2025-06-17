@@ -1,34 +1,26 @@
 const mongoose = require('mongoose');
 
 const choreSchema = new mongoose.Schema({
-  task: {
+  title: {
     type: String,
     required: true
   },
-  assigned: {
-    type: Boolean,
-    default: true
-  },
+  // assigned: {
+  //   type: Boolean,
+  //   default: true
+  // },
   completed: {
     type: Boolean,  
-    default: false
+    default: true
   },
-rating: {
+difficulty: {
     type: String,
     required: true
   },
-  
-  room: {
-    type: String,
-    required: true
-  },
-  date: {
+ 
+  dueDate: {
      type: String,
      required: true
-  },
-  time: {
-    type: String,
-    require: true
   },
 
   description: {
