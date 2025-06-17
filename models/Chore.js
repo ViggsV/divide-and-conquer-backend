@@ -11,7 +11,7 @@ const choreSchema = new mongoose.Schema({
   // },
   completed: {
     type: Boolean,  
-    default: true
+    default: false
   },
 difficulty: {
     type: String,
