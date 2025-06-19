@@ -5,29 +5,25 @@ const choreSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  // assigned: {
-  //   type: Boolean,
-  //   default: true
-  // },
   completed: {
-    type: Boolean,  
+    type: Boolean,
     default: false
   },
-difficulty: {
+  difficulty: {
     type: String,
     required: true
   },
- 
   dueDate: {
-     type: String,
-     required: true
+    type: String,
+    required: true
   },
-
   description: {
     type: String,
     required: true
-  },
-  
-});
+  }
+}, { timestamps: true }); // Adds createdAt and updatedAt fields
 
 module.exports = mongoose.model('Chore', choreSchema);
+
+
+// assigned: { // type: Boolean, // default: true // },
