@@ -2,6 +2,8 @@ const Chore = require("../models/Chore");
 const User = require("../models/User");
 
 exports.getChores = async (req, res) => {
+
+  // use the id of the user to specifically get chores linked to their account.
   try {
     const chores = await Chore.find();
     res.json(chores);
@@ -11,20 +13,8 @@ exports.getChores = async (req, res) => {
 };
 
 exports.addChore = async (req, res) => {
-  console.log("addChore");
-  console.log(req.headers);
-  console.log(req.body);
-  console.log(req.body)
-
-  const userToken = req.headers.authorization.split(" ")[1];
-
-  console.log(userToken);
-
-  if (!userToken) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
-
-  const userInDB = await User.findOne({ token: userToken });
+  const { id } = req.user
+  const userInDB = await User.findOne({ _id: id });
 
   console.log(userInDB);
 
