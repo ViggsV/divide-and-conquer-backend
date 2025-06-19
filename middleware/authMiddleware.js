@@ -1,7 +1,10 @@
 const jwt = require("jsonwebtoken");
 
 const authMiddleware = (req, res, next) => {
-    const authHeader = req.headers.authorization;
+    console.log("middleware getting called")
+    console.log(req)
+    const authHeader = req.headers.Authorization;
+    console.log(`authHeader: ${authHeader}`)
 
     // Check if authorization header exists and starts with 'Bearer '
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -9,6 +12,8 @@ const authMiddleware = (req, res, next) => {
     }
 
     const token = authHeader.split(' ')[1];
+
+    console.log(token)
 
     // Check if token exists after splitting
     if (!token) {
@@ -38,4 +43,4 @@ const authMiddleware = (req, res, next) => {
     }
 };
 
-module.exports = authMiddleware;
+module.exports = authMiddleware; 

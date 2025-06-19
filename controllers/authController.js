@@ -76,16 +76,25 @@ exports.refreshToken = async (req, res) => {
 
 // Registration
 exports.register = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, name } = req.body;
+  console.log(email, password, name)
 
   // Input validation
-  if (!email || !password) {
-    return res.status(400).json({ message: "Email and password are required" });
+  if (!email || !password || !name) {
+    return res.status(400).json({ message: "Email, password and name are all required" });
+  }
+
+    const hasNumbers = /\d/;
+
+
+  if ((name.length <= 3) || hasNumbers.test(name)) {
+    return res.status(400).json({ message: "Name cannot contain fewer than 3 characters and must not contain numbers."})
   }
 
   if (!isValidEmail(email)) {
     return res.status(400).json({ message: "Invalid email format" });
   }
+
 
   if (password.length < 6) {
     return res.status(400).json({ message: "Password must be at least 6 characters long" });
@@ -93,18 +102,25 @@ exports.register = async (req, res) => {
 
   try {
     // Check if user already exists
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ 
+        $or: [{ email }, { username: name }]
+     });
     if (existingUser) {
-      return res.status(409).json({ message: "Email already in use" });
+      const conflict = existingUser.email === email ? "Email already in use" : "Username already in use"
+      return res.status(409).json({ message: conflict });
     }
 
     // Create new user (assuming password hashing is handled in User model)
-    const user = new User({ email, password });
+    const user = new User({ email, password, username: name });
     await user.save();
 
     // Generate tokens
     const accessToken = generateToken(user);
     const refreshToken = generateRefreshToken(user);
+
+    user.token = accessToken;
+
+    await user.save()
 
     // Set refresh token cookie
     setRefreshTokenCookie(res, refreshToken);
