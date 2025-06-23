@@ -1,104 +1,103 @@
 const Chore = require("../models/Chore");
 const User = require("../models/User");
 
-
+// GET 
 exports.getChores = async (req, res) => {
   try {
-    const userId = req.user.id;
-    const chores = await Chore.find({ userId }); // Only return user's chores
+    const { pageId } = req.query;
+
+    if (!pageId) {
+      return res.status(400).json({ message: "Missing pageId" });
+    }
+
+    const chores = await Chore.find({ pageId });
     res.json(chores);
   } catch (err) {
+    console.error("Error fetching chores:", err);
     res.status(500).json({ message: err.message });
   }
 };
 
 
 exports.addChore = async (req, res) => {
-  const { id } = req.user
-  const userInDB = await User.findOne({ _id: id });
-
-  console.log(userInDB);
-
-  if (!userInDB) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
-
-  const chore = new Chore({
-    title: req.body.title,   
-    completed:req.body.completed,
-    difficulty: req.body.difficulty,    
-    dueDate: req.body.dueDate,
-    description: req.body.description,
-    userId: userInDB._id,
-  });
-  console.log(chore)
   try {
+    const userId = req.user.id;
+    const {
+      title,
+      completed = false,
+      difficulty = 1,
+      dueDate = null,
+      description = "",
+      pageId
+    } = req.body;
+
+    if (!title || !pageId) {
+      return res.status(400).json({ message: "Title and pageId are required" });
+    }
+
+    const chore = new Chore({
+      title,
+      completed,
+      difficulty,
+      dueDate,
+      description,
+      pageId,
+      userId,
+    });
+
     const newChore = await chore.save();
-    console.log(newChore)
     res.status(201).json(newChore);
   } catch (err) {
+    console.error("Error adding chore:", err);
     res.status(400).json({ message: err.message });
   }
 };
-// Update
+
+
+// PUT 
 exports.updateChore = async (req, res) => {
   try {
-    const userToken = req.headers.authorization.split(" ")[1];
+    const userId = req.user.id;
+    const chore = await Chore.findById(req.params.id);
 
-  if (!userToken) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
+    if (!chore) {
+      return res.status(404).json({ message: "Chore not found" });
+    }
 
-  const userInDB = await User.findOne({ token: userToken });
+    if (chore.userId.toString() !== userId) {
+      return res.status(403).json({ message: "Not authorized" });
+    }
 
-  if (!userInDB) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
-  const oldChore = await Chore.findById(req.params.id);
-  if (!oldChore) return res.status(404).json({ message: "Chore not found"});
-  if (oldChore.userId.toString() !== userInDB._id.toString()){
-    return res.status(403).json({ message: "You can only update your own chores."})
-  }
-  
-  
-    const chore = await Chore.findByIdAndUpdate(req.params.id, req.body, {
-      new: true, runValidators: true
+    const updated = await Chore.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
     });
-    if (!chore) return res.status(404).json({ message: 'Chore not found' });
-    
-    res.json(chore);
+
+    res.json(updated);
   } catch (err) {
     console.error("Update error:", err);
-    res.status(400).json({ error: err.message });
+    res.status(400).json({ message: err.message });
   }
- }
+};
 
-// Delete
-exports.removeChore= async (req, res) => {
+// DELETE 
+exports.removeChore = async (req, res) => {
   try {
- const userToken = req.headers.authorization.split(" ")[1];
+    const userId = req.user.id;
+    const chore = await Chore.findById(req.params.id);
 
-  if (!userToken) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
+    if (!chore) {
+      return res.status(404).json({ message: "Chore not found" });
+    }
 
-  const userInDB = await User.findOne({ token: userToken });
+    if (chore.userId.toString() !== userId) {
+      return res.status(403).json({ message: "Not authorized" });
+    }
 
-  if (!userInDB) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
-  const oldChore = await Chore.findById(req.params.id);
-  if (!oldChore) return res.status(404).json({ message: "Chore not found"});
-  if (oldChore.userId.toString() !== userInDB._id.toString()){
-    return res.status(403).json({ message: "You can only delete your own chores."})
-  }
-  
-
-    const chore = await oldChore.deleteOne();
-    if (!chore) return res.status(404).json({ message: 'Chore not found' });
-    res.json(oldChore);
+    await chore.deleteOne();
+    res.json({ message: "Chore deleted", chore });
   } catch (err) {
-    console.error("Error in removeChore:", err);
-    res.status(400).json({ message: 'Invalid entry' });
+    console.error("Delete error:", err);
+    res.status(400).json({ message: err.message });
   }
 };

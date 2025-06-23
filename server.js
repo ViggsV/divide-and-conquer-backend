@@ -48,10 +48,12 @@ mongoose.connection.on('error', (err) => {
 
 const choreRoutes = require("./routes/choreRoutes");
 const authRoutes = require("./routes/authRoutes");
+const pageRoutes = require("./routes/pageRoutes");
 
 
 app.use("/api/chores", choreRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/pages", pageRoutes);
 app.get('/', (request, response) => {
     response.send(`Welcome to divide and conquer API`);
 });

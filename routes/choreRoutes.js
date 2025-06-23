@@ -1,20 +1,25 @@
 const express = require('express');
 const router = express.Router();
-const { getChores, addChore , updateChore, removeChore} = require('../controllers/choreController');
+const {
+  getChores,
+  addChore,
+  updateChore,
+  removeChore,
+} = require('../controllers/choreController');
 const authMiddleware = require('../middleware/authMiddleware');
 
 
-// Get all chores
+
+// Get all chores 
 router.get('/', authMiddleware, getChores);
 
-
-// Create new chore
+// Add a new chore 
 router.post('/', authMiddleware, addChore);
 
+// Update a specific chore by ID
+router.put('/:id', authMiddleware, updateChore);
 
-router.put("/:id", authMiddleware, updateChore);
-
-router.delete("/:id", authMiddleware, removeChore);
-
+// Delete a specific chore by ID
+router.delete('/:id', authMiddleware, removeChore);
 
 module.exports = router;
