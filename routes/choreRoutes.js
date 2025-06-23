@@ -5,7 +5,8 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 
 // Get all chores
-router.get('/', getChores);
+router.get('/', authMiddleware, getChores);
+
 
 // Create new chore
 router.post('/', authMiddleware, addChore);

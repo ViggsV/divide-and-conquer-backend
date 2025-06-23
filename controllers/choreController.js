@@ -1,16 +1,17 @@
 const Chore = require("../models/Chore");
 const User = require("../models/User");
 
-exports.getChores = async (req, res) => {
 
-  // use the id of the user to specifically get chores linked to their account.
+exports.getChores = async (req, res) => {
   try {
-    const chores = await Chore.find();
+    const userId = req.user.id;
+    const chores = await Chore.find({ userId }); // Only return user's chores
     res.json(chores);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
+
 
 exports.addChore = async (req, res) => {
   const { id } = req.user
@@ -28,7 +29,7 @@ exports.addChore = async (req, res) => {
     difficulty: req.body.difficulty,    
     dueDate: req.body.dueDate,
     description: req.body.description,
-    // userId: userInDB._id,
+    userId: userInDB._id,
   });
   console.log(chore)
   try {
