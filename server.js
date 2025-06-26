@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3001;
 // middleware
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://127.0.1:3000"],
+    origin: ["http://localhost:3000", "http://127.0.1:3000","https://all-your-chores.vercel.app","https://all-your-chores.vercel.app/"],
     credentials: true,
   })
 );

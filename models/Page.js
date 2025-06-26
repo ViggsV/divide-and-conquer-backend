@@ -10,7 +10,7 @@ const pageSchema = new mongoose.Schema(
       ref: 'User',
       required: true,
     },
-
+    
     // Users who have access to the page
     users: [
       {
